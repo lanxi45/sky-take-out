@@ -1,12 +1,16 @@
 package com.sky.controller.admin;
 
 import com.sky.constant.MessageConstant;
+import com.sky.dto.DishPageQueryDTO;
+import com.sky.result.PageResult;
 import com.sky.result.Result;
+import com.sky.service.DishService;
 import com.sky.utils.AliOssUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -25,6 +29,9 @@ import java.util.UUID;
 public class CommonController {
     @Autowired
     private AliOssUtil aliOssUtil;
+    @Autowired
+    private DishService dishService;
+
     /**
      * 文件上传
      * @param file
@@ -50,4 +57,6 @@ public class CommonController {
         }
         return Result.error(MessageConstant.UPLOAD_FAILED);
     }
+
+
 }

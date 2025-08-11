@@ -12,6 +12,7 @@ import com.sky.entity.Employee;
 import com.sky.exception.DeletionNotAllowedException;
 import com.sky.mapper.DishFlavorMapper;
 import com.sky.mapper.DishMapper;
+import com.sky.mapper.SetmealDishMapper;
 import com.sky.result.PageResult;
 import com.sky.service.DishService;
 import com.sky.vo.DishVO;
@@ -32,6 +33,9 @@ public class DishServiceImpl implements DishService {
 
     @Autowired
     private DishFlavorMapper dishFlavorMapper;
+
+    @Autowired
+    private SetmealDishMapper setmealDishMapper;
 
 //    @Autowired
 //    private SetMealDishMapper setMealDishMapper;
@@ -59,5 +63,48 @@ public class DishServiceImpl implements DishService {
             dishFlavorMapper.insertBatch(flavors);
         }
 
+    }
+
+
+    /**
+     * 菜品分页查询
+     * @param dishPageQueryDTO
+     * @return
+     */
+    public PageResult pageQuery(DishPageQueryDTO dishPageQueryDTO) {
+        //开启分页
+        PageHelper.startPage(dishPageQueryDTO.getPage(),dishPageQueryDTO.getPageSize());
+        //查询分页结果，返回一个page对象
+        Page<DishVO> page = dishMapper.pageQuery(dishPageQueryDTO);
+        return new PageResult(page.getTotal(),page.getResult());
+    }
+
+    /**
+     * 菜品批量删除
+     * @param ids
+     */
+
+    @Transactional
+    public void deleteBatch(List<Long> ids) {
+        //判断当前菜品是否能够删除---菜品正在起售，不能删除？？
+        for(Long id:ids){
+            Dish dish = dishMapper.getById(id);
+            if(dish.getStatus() == StatusConstant.ENABLE){
+                //当前菜品处于起售中，不能删除
+                throw new DeletionNotAllowedException(MessageConstant.DISH_ON_SALE);
+            }
+        }
+        //判断菜品被某个套餐关联，如果是则不能删除
+        List<Long> setmealIds = setmealDishMapper.getSetmealIdsByDishIds(ids);
+        if(setmealIds != null && setmealIds.size() > 0){
+            //当前菜品被套餐关联了，不能删除
+            throw new DeletionNotAllowedException(MessageConstant.DISH_BE_RELATED_BY_SETMEAL);
+        }
+        //删除菜品表中的数据
+        for(Long id : ids){
+            dishMapper.deleteById(id);
+            //删除菜品关联发口味数据
+            dishFlavorMapper.deleteByDishId(id);
+        }
     }
 }

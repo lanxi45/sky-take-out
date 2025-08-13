@@ -35,13 +35,13 @@ public interface CategoryMapper {
      * @param id
      */
     @Delete("delete from category where id = #{id}")
-    @AutoFill(value = OperationType.UPDATE)
     void deleteById(Long id);
 
     /**
      * 根据id修改分类
      * @param category
      */
+    @AutoFill(value = OperationType.UPDATE)
     void update(Category category);
 
     /**

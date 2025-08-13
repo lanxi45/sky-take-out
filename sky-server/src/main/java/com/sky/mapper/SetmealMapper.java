@@ -42,6 +42,7 @@ public interface SetmealMapper {
     @AutoFill(OperationType.INSERT)
     void insert(Setmeal setmeal);
 
+
     /**
      * 分页查询
      * @param setmealPageQueryDTO
@@ -94,4 +95,7 @@ public interface SetmealMapper {
      * @return
      */
     Integer countByMap(Map map);
+
+
+
 }

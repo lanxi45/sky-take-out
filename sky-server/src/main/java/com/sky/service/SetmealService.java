@@ -1,8 +1,10 @@
 package com.sky.service;
 
+import com.sky.annotation.AutoFill;
 import com.sky.dto.SetmealDTO;
 import com.sky.dto.SetmealPageQueryDTO;
 import com.sky.entity.Setmeal;
+import com.sky.enumeration.OperationType;
 import com.sky.result.PageResult;
 import com.sky.vo.DishItemVO;
 import com.sky.vo.SetmealVO;
@@ -12,7 +14,7 @@ import java.util.List;
 public interface SetmealService {
 
     /**
-     * 新增套餐，同时需要保存套餐和菜品的关联关系
+     * 新增套餐, 同时需要保存套餐和菜品的关联关系
      *
      * @param setmealDTO
      */
@@ -34,6 +36,13 @@ public interface SetmealService {
     void deleteBatch(List<Long> ids);
 
     /**
+     * 插入套餐数据
+    * @param setmeal
+    */
+    @AutoFill(OperationType.INSERT)
+    void insert(Setmeal setmeal);
+
+    /**
      * 根据id查询套餐和关联的菜品数据
      *
      * @param id
@@ -49,14 +58,6 @@ public interface SetmealService {
     void update(SetmealDTO setmealDTO);
 
     /**
-     * 套餐起售、停售
-     *
-     * @param status
-     * @param id
-     */
-    void startOrStop(Integer status, Long id);
-
-    /**
      * 条件查询
      * @param setmeal
      * @return
@@ -69,4 +70,16 @@ public interface SetmealService {
      * @return
      */
     List<DishItemVO> getDishItemById(Long id);
+
+    /**
+     * 套餐启售停售
+     *
+     * @param status
+     * @param id
+     */
+    void startOrStop(Integer status, Long id);
+
+
+
+
 }

@@ -17,9 +17,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController
-@RequestMapping("/admin/setmeal")
-@Api("套餐相关接口")
+@RestController("userSetmealController")
+@RequestMapping("/user/setmeal")
+@Api(tags = "C端-套餐浏览接口")
 @Slf4j
 public class SetmealController {
     @Autowired
@@ -53,6 +53,7 @@ public class SetmealController {
         setmeal.setStatus(StatusConstant.ENABLE);
 
         List<Setmeal> list = setmealService.list(setmeal);
+        //list就是Redis缓存的返回结果
         return Result.success(list);
     }
 

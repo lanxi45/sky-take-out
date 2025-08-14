@@ -43,7 +43,6 @@ public class WebMvcConfiguration extends WebMvcConfigurationSupport {
                 .addPathPatterns("/admin/**")
                 .excludePathPatterns("/admin/employee/login");
 
-        //TODO 这里的路径需要修改，但是因为拦截器我不会debug，所以先这样
         registry.addInterceptor(jwtTokenUserInterceptor)
                 .addPathPatterns("user/**")
                 .excludePathPatterns("/user/user/login")

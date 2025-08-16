@@ -43,14 +43,22 @@ public class OrderController {
      * @param ordersPaymentDTO
      * @return
      */
+//    @PutMapping("/payment")
+//    @ApiOperation("订单支付")
+//    public Result<OrderPaymentVO> payment(@RequestBody OrdersPaymentDTO ordersPaymentDTO) throws Exception {
+//        log.info("订单支付：{}", ordersPaymentDTO);
+//        OrderPaymentVO orderPaymentVO = orderService.payment(ordersPaymentDTO);
+//        log.info("生成预支付交易单：{}", orderPaymentVO);
+//        return Result.success(orderPaymentVO);
+//    }
     @PutMapping("/payment")
     @ApiOperation("订单支付")
-    public Result<OrderPaymentVO> payment(@RequestBody OrdersPaymentDTO ordersPaymentDTO) throws Exception {
+    public Result<String> payment(@RequestBody OrdersPaymentDTO ordersPaymentDTO) throws Exception {
         log.info("订单支付：{}", ordersPaymentDTO);
-        OrderPaymentVO orderPaymentVO = orderService.payment(ordersPaymentDTO);
-        log.info("生成预支付交易单：{}", orderPaymentVO);
-        return Result.success(orderPaymentVO);
+        orderService.paySuccess(ordersPaymentDTO.getOrderNumber());
+        return  Result.success();
     }
+
 
     /**
      * 历史订单查询
@@ -90,6 +98,18 @@ public class OrderController {
     @ApiOperation("取消订单")
     public Result cancel(@PathVariable Long id) throws Exception {
         orderService.userCancelByOrderId(id);
+        return Result.success();
+    }
+
+    /**
+     * 订单催单
+     * @param id
+     * @return
+     */
+    @GetMapping("/reminder/{id}")
+    @ApiOperation("订单催单")
+    public Result reminder(@PathVariable Long id){
+        orderService.reminder(id);
         return Result.success();
     }
 

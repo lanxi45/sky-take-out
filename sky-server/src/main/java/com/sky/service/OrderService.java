@@ -54,4 +54,9 @@ public interface OrderService {
     void userCancelByOrderId(Long id) throws Exception;
 
 
+    /**
+     * 订单催单
+     * @param id
+     */
+    void reminder(Long id);
 }
